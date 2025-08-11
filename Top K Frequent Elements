@@ -1,0 +1,33 @@
+Time Complexity 
+Building frequency map → O(n) (n = length of nums) 
+Adding to heap → Each insertion/removal in a heap of size k takes O(log k) 
+You insert at most m unique numbers (m ≤ n) So: O(m log k) 
+Extracting k results → O(k log k) 
+Total: 𝑂 ( 𝑛 + 𝑚 log ⁡ 𝑘 ) O(n+mlogk) 
+Since m ≤ n, worst case: O(n log k). 
+Space Complexity 
+Frequency map → O(m) Heap → O(k) Result array → O(k)
+Total: 𝑂 ( 𝑚 + 𝑘 ) O(m+k) Worst case: O(n) space.
+
+
+
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer,Integer> map = new HashMap<>();
+        for(int i : nums){
+            map.put(i,map.getOrDefault(i,0)+1);
+        }
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>((a,b)->map.get(a)-map.get(b));
+        for(int i : map.keySet()){
+            minHeap.add(i);
+            if(minHeap.size()>k){
+                minHeap.poll();
+            }
+        }
+        int[] result = new int[k];
+        for(int i=0;i<k;i++){
+            result[i]= minHeap.poll();
+        }
+        return result;
+    }
+}
